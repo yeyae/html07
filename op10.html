@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-image: url("snow.jpg");
+        background-size: 1024px 600px;
+        background-repeat: no-repeat;
+        position: relative;
+      }
+      div {
+        position: absolute;
+        display: inline;
+        color: white;
+      }
+    </style>
+    <script>
+      function snow() {
+        for (let i = 0; i < 30; i++) {
+          let div = document.createElement("div");
+          div.innerHTML = "<h1>*</h1>";
+          let x = Math.floor(Math.random() * 1024); // 그림의 너비
+          let y = Math.floor(Math.random() * 600); // 그림의 높이
+          div.style.left = x + "px"; // 왼쪽에서 얼마만큼 떨어져 있는지 위치 정해주기
+          div.style.top = y + "px"; // 위에서 얼마만큼 떨어져 있는지 위치 정해주기
+          let bodyTag = document.getElementsByTagName("body")[0]; // 문서내의 body 태그 가져오기
+          // 그런데 getElementsByTagName은 배열로 가져오므로 0번째 인덱스라고 말을 해줘야 한다.
+          bodyTag.appendChild(div);
+          // body 태그에 만든 div 태그 붙이기
+        }
+        {
+          name: "myname";
+        }
+        setInterval(function () {
+          // 눈의 위치를 1씩 증가
+          // 눈의 위치(y)가 그림의 높이보다 커질 경우 0으로 리셋
+          let divArr = document.getElementsByTagName("div");
+          for (let i = 0; i < 30; i++) {
+            let div = divArr[i];
+            // div.style.top += 1; //이렇게 하면 절대 동작안해요
+            // "100px" + 1 의 결과는?
+            // 문자열 처리를 해줍니다.
+            let y = div.style.top.replace("px", "");
+            // 문자열에서 px 단어 삭제
+            y = parseInt(y);
+            // 문자열 숫자로 변경
+            if (y >= 600) {
+              // 눈의 위치 y가 그림의 높이보다 크거나 같으면
+              y = 0; // 0으로 리셋
+            } else {
+              // 아니면
+              y++; // 1씩 증가
+            }
+            div.style.top = y + "px"; // top 속성 정해주기
+          }
+        }, 100);
+      }
+    </script>
+  </head>
+  <body onload="snow()"></body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      function savePost() {
+        let title = document.getElementById("title");
+        let text = document.getElementById("text");
+        // dom 객체 그 자체
+        // 로컬스토리지에 저장
+        localStorage.setItem(title.value, text.value);
+      }
+      function viewPost() {
+        let nwin = window.open(); // 새창을 열고 그 새창을 참조하는 변수 => nwin
+        // document.write() 새창이 아니라 현재 창에 문서에 추가
+        // nwin.document.write() => 새창의 document 객체를 통해서 문서를 작성
+        nwin.document.write("<h1>포스트잇 출력</h1>");
+        nwin.document.write("<hr/>");
+        nwin.document.write("<ol>");
+        for (let i = 0; i < localStorage.length; i++) {
+          nwin.document.write("<li> ");
+          nwin.document.write(localStorage.key(i)); // 로컬스토리지 i번째 원소의 key
+          nwin.document.write(" : ");
+          nwin.document.write(localStorage.getItem(localStorage.key(i))); // getItem(key)
+          nwin.document.write(" </li>");
+        }
+        nwin.document.write("</ol>");
+      }
+    </script>
+  </head>
+  <body>
+    <h1>포스트 잇</h1>
+    <hr />
+    <span>제목</span><input type="text" id="title" />
+    <div>메모 입력</div>
+    <textarea id="text"></textarea><br />
+    <button onclick="savePost()">저장</button>
+    <button onclick="viewPost()">보기</button>
+  </body>
+</html>

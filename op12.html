@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      function saveWord() {
+        //단어 저장
+        //영어 input 태그 값 가져와서
+        let eng = document.getElementById("eng"); // 영어입력 전용 input
+        let kor = document.getElementById("kor"); // 한글입력 전용 input
+
+        //로컬스토리지에 저장 setItem(영어, 한글); 영어가 key, 한글이 value
+        //로컬스토리지에 이미 해당 단어가 있는 경우 confirm() 메소드를 통해 바꿀건지 확인
+        //getItem(영어) == null => 해당 단어가 없음
+        //getItem(영어) != null => 해당 단어가 있음
+        let val = localStorage.getItem(eng.value); // 로컬스토리지에 input 태그로 입력된 값이 있다면
+        //그 한글 값이 들어있다. 값이 없다면 null 이 들어있게 된다.
+        if (val == null) {
+          // eng 로 등록된 단어가 없다.
+          localStorage.setItem(eng.value, kor.value);
+          alert("입력 완료");
+          eng.value = ""; //태그 값 비우기
+          kor.value = ""; //태그 값 비우기
+        } else {
+          // eng 로 등록된 단어가 이미 있다면?
+          // confirm 메소드를 통해서 바꾸시겠습니까? 라고 물어본다.
+          let conf = confirm(
+            eng.value + "로 등록된 단어가 이미 있습니다. 바꾸시겠습니까?"
+          );
+          // 사용자가 에(확인) 을 누르면 conf 에는 true, 아니요(취소) 를 누르면 false
+          if (conf) {
+            // conf가 true이면 사용자가 확인을 눌렀다는거죠.
+            localStorage.setItem(eng.value, kor.value);
+          }
+        }
+      }
+      function searchWord() {
+        //영단어 검색
+        //영어 input 태그 값 가져와서
+        let eng = document.getElementById("eng");
+        //로컬스토리지에서 가져오기
+        let key = localStorage.getItem(eng.value);
+        //해당 영어 key 로 등록된 한글 값이 있다면
+        if (key != null) {
+          //한글 input 태그의 value로 설정해주기
+          let kor = document.getElementById("kor");
+          kor.value = key;
+        } else {
+          kor.value = "해당 단어가 존재하지 않습니다.";
+        }
+      }
+      function deleteWord() {
+        //단어 삭제
+        //영어 input 태그 값 가져와서
+        //로컬스토리지에 있는 해당 값 삭제
+        //localStorage.removeItem(key);
+        let eng = document.getElementById("eng");
+        localStorage.removeItem(eng.value);
+      }
+      function getWordList() {
+        //전체 보기
+        let nwin = window.open("", "list", "width=300,height=300");
+        // open("새 주소" , "새창 이름", "창 옵션")
+        //window.open() 을 사용해서 새창 열기
+        //window.document.write() 사용해서 새창에 리스트 작성
+        // document.write() ==> 현재 윈도우에 write() 하는것.
+        nwin.document.write("<ol>"); // ==> 새로 만든 윈도우에 write() 하는것.
+        for (let i = 0; i < localStorage.length; i++) {
+          nwin.document.write(
+            "<li>" +
+              localStorage.key(i) +
+              " : " +
+              localStorage.getItem(localStorage.key(i)) +
+              " </li>"
+            // <li> apple : 사과 </li>
+          );
+        }
+        nwin.document.write("</ol>");
+      }
+    </script>
+  </head>
+  <body>
+    <h1>나의 단어장 만들기</h1>
+    <hr />
+    <span>영어</span><input id="eng" type="text" /><br />
+    <span>한글</span><input id="kor" type="text" /><br />
+    <br />
+    <button onclick="saveWord()">단어 저장</button>
+    <button onclick="searchWord()">영단어 검색</button>
+    <button onclick="deleteWord()">단어 삭제</button>
+    <button onclick="getWordList()">전체 보기</button>
+  </body>
+</html>
